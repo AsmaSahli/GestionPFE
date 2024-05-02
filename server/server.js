@@ -1,16 +1,41 @@
-const express =require("express")
+const express = require("express");
 const app=express();
-
-require("./config/mongoose")
+const cookieParser = require('cookie-parser');
 
 const cors=require("cors");
 app.use(cors({
-    origin: "http://localhost:3000",  
-    credentials: true,
+  origin: "http://localhost:3000",  
+  credentials: true,
 }));
 
-require("./routes/User.routes")
-
 app.use(express.json(express.urlencoded({extended: true})))
+app.use(cookieParser());
 
-app.listen(8000,()=>console.log('listenning on port : 8000'))
+
+
+
+require("dotenv").config()
+require("./config/mongoose")
+
+const port=process.env.PORT
+
+
+require("./routes/User.routes")(app)
+
+
+    //middleware for errors  
+    app.use ((err,req,res,next) => {
+        console.error(err.stack);
+        const statusCode = err.statusCode || 500;
+        const message = err.message || 'Internal server error';
+        res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message
+        })
+    }
+    )
+
+
+
+app.listen(port,()=>console.log(`listening on port: ${port}`))

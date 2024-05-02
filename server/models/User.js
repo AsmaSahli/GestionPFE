@@ -14,32 +14,24 @@ const UserSchema =new mongoose.Schema(
             required:true
 
         },
-        niveau:
+        cin:
         {
             type:String,
-            default:"L3"
+            required:true,
+            unique:true 
+
         },
-        class:
-        {
-            type:String,
-            required:true
-        },
+
+
         option:
         {
             type:String,
-            required:true
         },
 
         role:
         {
             type:String,
             required:true
-        },
-        email:
-        {
-            type:String,
-            required:true,
-            unique:true 
         },
 
         password:
